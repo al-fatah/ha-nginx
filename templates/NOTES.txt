@@ -1,0 +1,11 @@
+1) Service:
+   kubectl get svc {{ include "ha-nginx.fullname" . }}
+
+2) Check pods:
+   kubectl get pods -l app.kubernetes.io/instance={{ .Release.Name }}
+
+3) Probes:
+   /health returns 200 OK.
+
+4) TLS:
+   If .Values.tls.enabled=true, ensure the secret {{ .Values.tls.secretName }} exists with keys tls.crt and tls.key.

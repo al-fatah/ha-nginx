@@ -1,0 +1,65 @@
+replicaCount: 3
+
+image:
+  repository: nginx
+  tag: "1.25-alpine"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  httpsPort: 443
+
+tls:
+  enabled: false
+  # If enabled=true, set an existing TLS secret with keys: tls.crt, tls.key
+  secretName: ""   # e.g., ha-nginx-tls
+
+upstreams:
+  name: app_backend
+  servers:
+    - host: "app1.default.svc.cluster.local"
+      port: 8080
+      weight: 1
+      maxFails: 3
+      failTimeout: "30s"
+    - host: "app2.default.svc.cluster.local"
+      port: 8080
+      weight: 1
+      maxFails: 3
+      failTimeout: "30s"
+
+serverNames:
+  - "_"   # wildcard default; replace with real hostnames if needed
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+podAnnotations: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Spread pods across nodes for HA (recommended)
+topologySpreadConstraints:
+  enabled: true
+  maxSkew: 1
+  whenUnsatisfiable: ScheduleAnyway
+
+# PodDisruptionBudget
+pdb:
+  enabled: true
+  minAvailable: 2
+
+# Extra environment variables for the container (optional)
+extraEnv: []
+
+# Extra volume mounts (optional)
+extraVolumeMounts: []
+extraVolumes: []

@@ -1,0 +1,29 @@
+# OS / Editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.bak
+
+# Helm build artifacts
+charts/
+tmp/
+*.tgz
+*.lock
+Chart.lock
+
+# Kubernetes / Secrets
+*.secret.yaml
+*.crt
+*.key
+
+# Logs & outputs
+logs/
+*.log
+
+# Python or scripting utilities (if you use helper scripts)
+__pycache__/
+*.pyc
+
+# Local test values
+test-values.yaml
